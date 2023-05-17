@@ -2,6 +2,8 @@ package rw.heritier.jwt.configuration;
 
 import java.io.IOException;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -19,6 +21,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION = "Autorization";
 
     private final JwtService jwtService;
+
+    private final UserDetails userDetails;
 
     @Override
     protected void doFilterInternal(
@@ -39,7 +43,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         // Extracting user email / username
         userEmail = jwtService.extractUsername(jwt);
+        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
 
-    }
+        }
+
+}
 
 }
