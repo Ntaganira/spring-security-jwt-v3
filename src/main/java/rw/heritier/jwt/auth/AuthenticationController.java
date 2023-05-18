@@ -18,12 +18,13 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponseDTO> register(
             @RequestBody RegisterRequestDTO registerRequest) {
+        return ResponseEntity.ok(service.register(registerRequest));
 
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponseDTO> authenticateRequest(
             @RequestBody AuthenticationRequestDTO request) {
-
+        return ResponseEntity.ok(service.authenticate(request));
     }
 }
