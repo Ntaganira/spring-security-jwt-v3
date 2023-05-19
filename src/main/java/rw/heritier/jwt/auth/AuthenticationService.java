@@ -15,37 +15,37 @@ import rw.heritier.jwt.repository.UserRepository;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final AuthenticationManager authManager;
+        private final UserRepository repository;
+        private final PasswordEncoder passwordEncoder;
+        private final JwtService jwtService;
+        private final AuthenticationManager authManager;
 
-    public AuthenticationResponseDTO register(RegisterRequestDTO request) {
-        User user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .build();
+        public AuthenticationResponseDTO register(RegisterRequestDTO request) {
+                User user = User.builder()
+                                .firstName(request.getFirstName())
+                                .lastName(request.getLastName())
+                                .email(request.getEmail())
+                                .password(passwordEncoder.encode(request.getPassword()))
+                                .role(Role.USER)
+                                .build();
 
-        repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponseDTO.builder()
-                .token(jwtToken)
-                .build();
-    }
+                repository.save(user);
+                var jwtToken = jwtService.generateToken(user);
+                return AuthenticationResponseDTO.builder()
+                                .token(jwtToken)
+                                .build();
+        }
 
-    public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
-        authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()));
+        public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
+                authManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(
+                                                request.getEmail(),
+                                                request.getPassword()));
 
-        var user = repository.findUserByEmail(request.getEmail());
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponseDTO.builder()
-                .token(jwtToken)
-                .build();
-    }
+                var user = repository.findUserByEmail(request.getEmail()).orElseThrow();
+                var jwtToken = jwtService.generateToken(user);
+                return AuthenticationResponseDTO.builder()
+                                .token(jwtToken)
+                                .build();
+        }
 }

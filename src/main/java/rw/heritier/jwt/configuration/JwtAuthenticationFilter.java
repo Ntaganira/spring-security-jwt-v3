@@ -19,14 +19,11 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Autorization";
 
     private final JwtService jwtService;
-
-    private final UserDetails userDetails;
-
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -49,7 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Extracting user email / username
         userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
