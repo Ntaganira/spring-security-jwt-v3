@@ -22,6 +22,8 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
 
     @Bean("cecurityFilterChain")
+    // @Order(SecurityProperties.BASIC_AUTH_ORDER) // this was commented by it gives
+    // the method lower priority
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf()
