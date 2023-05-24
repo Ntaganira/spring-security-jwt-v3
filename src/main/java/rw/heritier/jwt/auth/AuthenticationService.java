@@ -31,8 +31,10 @@ public class AuthenticationService {
 
                 repository.save(user);
                 var jwtToken = jwtService.generateToken(user);
+                var jwtRefreshToken = jwtService.generateRefreshToken(user);
                 return AuthenticationResponseDTO.builder()
-                                .token(jwtToken)
+                                .accessToken(jwtToken)
+                                .refreshToken(jwtRefreshToken)
                                 .build();
         }
 
@@ -44,8 +46,10 @@ public class AuthenticationService {
 
                 var user = repository.findUserByEmail(request.getEmail()).orElseThrow();
                 var jwtToken = jwtService.generateToken(user);
+                var jwtRefreshToken = jwtService.generateRefreshToken(user);
                 return AuthenticationResponseDTO.builder()
-                                .token(jwtToken)
+                                .accessToken(jwtToken)
+                                .refreshToken(jwtRefreshToken)
                                 .build();
         }
 }
