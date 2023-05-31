@@ -20,4 +20,9 @@ public class UserServiceImpl implements UserService {
         return repository.findUserByEmail(email);
     }
 
+    @Override
+    public User save(User user) {
+        return repository.save(user);
+    }
+
 }
